@@ -27,7 +27,7 @@ var InClick = 0
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NoteItem(navController: NavController) {
+fun NoteItem( callEdit: (Int?) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val pickedDate by remember {
@@ -57,7 +57,7 @@ fun NoteItem(navController: NavController) {
                         modifier = Modifier
                             .padding(start = 25.dp, end = 25.dp, bottom = 15.dp),
                         onClick = {
-                            editNum = i
+                            callEdit(i)
                         }
                     ) {
                         println(i)

@@ -36,7 +36,12 @@ fun AllNoteScreen(navController: NavController) {
                     .padding(values)
             )
             {
-                NoteItem(navController)
+                NoteItem(callEdit = {
+                    if (it != null) {
+                        editNum = it
+                        navController.navigate("EditNoteScreen")
+                    }
+                })
             }
         }
     }
