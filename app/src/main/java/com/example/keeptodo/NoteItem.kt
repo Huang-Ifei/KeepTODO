@@ -19,12 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.keeptodo.ui.theme.*
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-var onClick = 0
+var InClick = 0
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -58,7 +57,7 @@ fun NoteItem(navController: NavController) {
                         modifier = Modifier
                             .padding(start = 25.dp, end = 25.dp, bottom = 15.dp),
                         onClick = {
-                            editNum=i
+                            editNum = i
                         }
                     ) {
                         println(i)
@@ -76,15 +75,15 @@ fun NoteItem(navController: NavController) {
                             ) {
                                 IconButton(
                                     onClick = {
-                                        if (onClick != 0) {
+                                        if (InClick != 0) {
 
                                         } else {
-                                            onClick++
-                                            println(onClick)
+                                            InClick++
+                                            println(InClick)
                                             coroutineScope.launch {
                                                 withContext(Dispatchers.IO) {
                                                     delay(400)
-                                                    if (onClick == 1) {
+                                                    if (InClick == 1) {
                                                         if (arrString[1][i] == pickedDate.toString()) daily--
                                                         for (j in i until n) {
                                                             arrString[1][j] = arrString[1][j + 1]
@@ -102,7 +101,7 @@ fun NoteItem(navController: NavController) {
                                                         re = !re
                                                         delay(10)
                                                     }
-                                                    onClick = 0
+                                                    InClick = 0
                                                 }
                                             }
                                         }
@@ -156,10 +155,13 @@ fun NoteItem(navController: NavController) {
         }
     }
 }
+
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DailyNoteItem(navController: NavController) {
-
+fun DailyNoteItem(
+    callEdit: (Int?) -> Unit
+) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val pickedDate by remember {
@@ -168,10 +170,9 @@ fun DailyNoteItem(navController: NavController) {
     var re by remember {
         mutableStateOf(true)
     }
-
     val i = (0 until n).toList()
     if (re) {
-        LazyColumn {
+        LazyColumn(modifier = Modifier) {
             item { Spacer(modifier = Modifier.height(10.dp)) }
             items(i) { i ->
                 if (arrString[1][i] == pickedDate.toString()) {
@@ -179,14 +180,15 @@ fun DailyNoteItem(navController: NavController) {
                         "1" -> MainColor
                         "2" -> Blue40
                         "3" -> Purple40
-                        else -> BackGround // Use the appropriate default color here
+                        else -> Color.Transparent
                     }
                     Card(
                         colors = CardDefaults.cardColors(cardColor),
-                        modifier = Modifier.padding(start = 25.dp, end = 25.dp, bottom = 15.dp),
-                        onClick = {
-                            editNum=i
-                        }
+                        modifier = Modifier
+                            .padding(start = 25.dp, end = 25.dp, bottom = 15.dp)
+                            .clickable {
+                                callEdit(i)
+                            }
                     ) {
                         println(i)
                         Box(
@@ -202,15 +204,15 @@ fun DailyNoteItem(navController: NavController) {
                                 horizontalAlignment = Alignment.End,
                             ) {
                                 IconButton(onClick = {
-                                    if (onClick != 0) {
+                                    if (InClick != 0) {
 
                                     } else {
-                                        onClick++
-                                        println(onClick)
+                                        InClick++
+                                        println(InClick)
                                         coroutineScope.launch {
                                             withContext(Dispatchers.IO) {
                                                 delay(400)
-                                                if (onClick == 1) {
+                                                if (InClick == 1) {
                                                     for (j in i until n) {
                                                         arrString[1][j] = arrString[1][j + 1]
                                                         arrString[2][j] = arrString[2][j + 1]
@@ -228,7 +230,7 @@ fun DailyNoteItem(navController: NavController) {
                                                     re = !re
                                                     delay(10)
                                                 }
-                                                onClick = 0
+                                                InClick = 0
                                             }
                                         }
                                     }
@@ -270,4 +272,3 @@ fun DailyNoteItem(navController: NavController) {
         }
     }
 }
-

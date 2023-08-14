@@ -59,10 +59,10 @@ class MainActivity : ComponentActivity() {
 fun Navigation() {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController = navController, startDestination = "HomeScreen",
-        enterTransition = { fadeIn(animationSpec = tween(300))},
-        exitTransition = { fadeOut(animationSpec = tween(500))},
-        popEnterTransition = { fadeIn(animationSpec = tween(300))},
-        popExitTransition = { fadeOut(animationSpec = tween(500))},
+        enterTransition = { fadeIn(animationSpec = tween(500))},
+        exitTransition = { fadeOut(animationSpec = tween(300))},
+        popEnterTransition = { fadeIn(animationSpec = tween(400))},
+        popExitTransition = { fadeOut(animationSpec = tween(300))},
         ) {
         composable("HomeScreen",
             exitTransition = {fadeOut(animationSpec = tween(300,200))},
@@ -82,9 +82,7 @@ fun Navigation() {
             ) {
             AllNoteScreen(navController)
         }
-        composable("EditNoteScreen",
-            popExitTransition = {fadeOut(animationSpec = tween(500))},
-            enterTransition = { fadeIn(animationSpec = tween(500))}){
+        composable("EditNoteScreen"){
             EditNoteScreen(navController)
         }
     }

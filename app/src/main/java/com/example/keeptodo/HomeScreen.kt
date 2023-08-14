@@ -40,6 +40,9 @@ fun HomeScreen(navController: NavController) {
     for (i in 0..n) {
         if (arrString[1][i] == LocalDate.now().toString()) daily++
     }
+    var editItem by remember {
+        mutableStateOf(0)
+    }
     Surface(color = BackGround, modifier = Modifier.fillMaxSize()) {
         Box {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -75,7 +78,14 @@ fun HomeScreen(navController: NavController) {
                         .fillMaxSize()
                         .padding(values)
                 ) {
-                    DailyNoteItem(navController)
+                    DailyNoteItem(
+                        callEdit = {
+                            if (it != null) {
+                                editNum = it
+                                navController.navigate("EditNoteScreen")
+                            }
+                        }
+                    )
                 }
             }
             NewButton(navController)
@@ -108,7 +118,7 @@ fun NewButton(navController: NavController) {
         Row() {
             ExtendedFloatingActionButton(
                 onClick = {
-                    isOpen=true
+                    isOpen = true
                     navController.navigate("PlanScreen")
                 },
                 icon = {

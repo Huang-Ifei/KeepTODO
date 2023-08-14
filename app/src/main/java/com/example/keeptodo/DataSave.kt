@@ -8,9 +8,10 @@ import com.google.gson.Gson
 var arrString = Array(4){Array(1000){""} }
 var n = 0
 var daily = 0
-var editNum = -1
+var editNum = 0
 
 // 保存数组到SharedPreferences
+@Suppress("DEPRECATION")
 fun saveArrayToSharedPreferences(context: Context, key: String) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     val editor = prefs.edit()
@@ -21,6 +22,7 @@ fun saveArrayToSharedPreferences(context: Context, key: String) {
 }
 
 // 从SharedPreferences中读取数组
+@Suppress("DEPRECATION")
 fun loadArrayFromSharedPreferences(context: Context, key: String) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     val json = prefs.getString(key, null)
