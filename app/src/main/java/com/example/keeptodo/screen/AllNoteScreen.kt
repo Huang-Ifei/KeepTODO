@@ -43,7 +43,7 @@ fun AllNoteScreen(
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.largeTopAppBarColors(
                         containerColor = BackGround,
-                        scrolledContainerColor = Color1
+                        scrolledContainerColor = BackGround
                     ),
                 )
             }) { values ->

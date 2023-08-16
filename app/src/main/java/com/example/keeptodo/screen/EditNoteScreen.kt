@@ -1,5 +1,6 @@
 package com.example.keeptodo.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -62,7 +63,7 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
     onEvent(ContactEvent.SetContext(context))
     onEvent(ContactEvent.SetColor(colorSelect))
     val dateDialogState = rememberMaterialDialogState()
-    Surface(modifier = Modifier.fillMaxSize(), color = Color1) {
+    Surface(modifier = Modifier.fillMaxSize(), color = BackGround) {
         Column(
             Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,7 +72,8 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
             Card(
                 Modifier
                     .height(450.dp)
-                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(BackGround)
+                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(Color.White),
+                border = BorderStroke(width = 1.dp, color = GreenBorder)
             ) {
                 Column(Modifier.fillMaxSize()) {
                     Box {
@@ -111,7 +113,7 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                             colors = TextFieldDefaults.textFieldColors(
                                 textColor = Color.Black,
                                 cursorColor = MainColor,
-                                containerColor = BackGround,
+                                containerColor = Color.White,
                                 focusedIndicatorColor = indicatorColor,
                                 unfocusedIndicatorColor = indicatorColor,
                                 focusedLabelColor = indicatorColor,
@@ -143,7 +145,7 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 colorSelect = 1
                                 onEvent(ContactEvent.SetColor(colorSelect))
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = MainColor)
+                            colors = RadioButtonDefaults.colors(selectedColor = Green40)
                         )
                         Text(text = "绿色", fontSize = 18.sp, modifier = Modifier.clickable {
                             colorSelect = 1
@@ -183,7 +185,7 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 onEvent(ContactEvent.DeleteContact(contactSelect))
                                 navController.popBackStack()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = ExtendedColor)
+                            colors = ButtonDefaults.buttonColors(containerColor = BackGround)
                         ) {
                             Text(text = "删除计划", fontSize = 17.sp, color = ExtendedFontColor)
                         }

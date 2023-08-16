@@ -1,5 +1,6 @@
 package com.example.keeptodo.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -36,7 +37,7 @@ fun PlanScreen(navController: NavController, state: ContactState, onEvent: (Cont
     var set by remember {
         mutableStateOf(initialization(onEvent))
     }
-    Surface(modifier = Modifier.fillMaxSize(), color = Color1, shadowElevation = 50.dp) {
+    Surface(modifier = Modifier.fillMaxSize(), color = BackGround, shadowElevation = 50.dp) {
         val dateDialogState = rememberMaterialDialogState()
         var indicatorColor by remember {
             mutableStateOf(Color.Gray)
@@ -49,7 +50,8 @@ fun PlanScreen(navController: NavController, state: ContactState, onEvent: (Cont
             Card(
                 Modifier
                     .height(450.dp)
-                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(BackGround)
+                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(Color.White),
+                border = BorderStroke(width = 1.dp, color = GreenBorder)
             ) {
                 Column(Modifier.fillMaxSize()) {
                     Box {
@@ -86,7 +88,7 @@ fun PlanScreen(navController: NavController, state: ContactState, onEvent: (Cont
                             colors = TextFieldDefaults.textFieldColors(
                                 textColor = Color.Black,
                                 cursorColor = MainColor,
-                                containerColor = BackGround,
+                                containerColor = Color.White,
                                 focusedIndicatorColor = indicatorColor,
                                 unfocusedIndicatorColor = indicatorColor,
                                 focusedLabelColor = indicatorColor,
@@ -117,7 +119,7 @@ fun PlanScreen(navController: NavController, state: ContactState, onEvent: (Cont
                         RadioButton(
                             selected = state.color==1,
                             onClick = {onEvent(ContactEvent.SetColor(1))},
-                            colors = RadioButtonDefaults.colors(selectedColor = MainColor)
+                            colors = RadioButtonDefaults.colors(selectedColor = Green40)
                         )
                         Text(text = "绿色", fontSize = 18.sp, modifier = Modifier.clickable {onEvent(ContactEvent.SetColor(1))})
                         Spacer(modifier = Modifier.width(5.dp))

@@ -57,7 +57,7 @@ fun HomeScreen(
                         scrollBehavior = scrollBehavior,
                         colors = TopAppBarDefaults.largeTopAppBarColors(
                             containerColor = BackGround,
-                            scrolledContainerColor = Color1
+                            scrolledContainerColor = BackGround
                         ),
                     )
                 }) { values ->
@@ -84,9 +84,8 @@ fun NewButton(navController: NavController) {
     val height by animateIntAsState(targetValue = if (isOpen) 900 else 64, label = "", animationSpec = tween(500))
     val width by animateIntAsState(targetValue = if (isOpen) 450 else 140, label = "", animationSpec = tween(400))
     val pad by animateIntAsState(targetValue = if (isOpen) 0 else 25, label = "", animationSpec = tween(500))
-    val elevation by animateIntAsState(targetValue = if (isOpen) 0 else 3, label = "", animationSpec = tween(300))
     val color by animateColorAsState(
-        targetValue = if (isOpen) Color1 else ExtendedColor,
+        targetValue = if (isOpen) BackGround else ExtendedColor,
         label = "",
         animationSpec = tween(500)
     )
@@ -115,8 +114,8 @@ fun NewButton(navController: NavController) {
                 containerColor = color,
                 modifier = Modifier.size(width.dp, height.dp),
                 elevation = FloatingActionButtonDefaults.elevation(
-                    defaultElevation = 5.dp,
-                    pressedElevation = elevation.dp
+                    defaultElevation = 3.dp,
+                    pressedElevation = 0.dp
                 )
             )
             Spacer(modifier = Modifier.width(pad.dp))

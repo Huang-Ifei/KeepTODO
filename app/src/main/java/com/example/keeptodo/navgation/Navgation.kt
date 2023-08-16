@@ -23,7 +23,7 @@ fun Navigation(state: ContactState, onEvent: (ContactEvent) -> Unit) {
     AnimatedNavHost(
         navController = navController, startDestination = "HomeScreen",
         enterTransition = { fadeIn(animationSpec = tween(500)) },
-        exitTransition = { fadeOut(animationSpec = tween(300)) },
+        exitTransition = { fadeOut(animationSpec = tween(400)) },
         popEnterTransition = { fadeIn(animationSpec = tween(400)) },
         popExitTransition = { fadeOut(animationSpec = tween(300)) },
     ) {

@@ -5,11 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -46,12 +48,28 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 val state by viewModel.state.collectAsState()
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = BackGround) {
+                CompositionLocalProvider(LocalRippleTheme provides SecondaryRippleTheme) {
+                    Surface(modifier = Modifier.fillMaxSize(), color = BackGround) {
                         Navigation(state,viewModel::onEvent)
+                    }
                 }
+                // A surface container using the 'background' color from the theme
             }
         }
     }
 }
 
+@Immutable
+private object SecondaryRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = RippleTheme.defaultRippleColor(
+        contentColor = Color.Gray,
+        lightTheme = true
+    )
+
+    @Composable
+    override fun rippleAlpha() = RippleTheme.defaultRippleAlpha(
+        contentColor = Color.Gray,
+        lightTheme = true
+    )
+}

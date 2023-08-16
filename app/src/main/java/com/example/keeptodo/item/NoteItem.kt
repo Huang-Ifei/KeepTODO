@@ -1,11 +1,16 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.example.keeptodo.item
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,22 +33,23 @@ fun AllNoteItem(
     val coroutineScope = rememberCoroutineScope()
     ContactEvent.SortContact(sortType = SortType.DATE)
     LazyColumn() {
-        item { Spacer(modifier = Modifier.height(5.dp)) }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
         items(state.contacts) { contact ->
             val cardColor = when (contact.color) {
-                1 -> MainColor
+                1 -> Green40
                 2 -> Blue40
                 3 -> Purple40
                 else -> Color.Transparent
             }
             Card(
-                colors = CardDefaults.cardColors(cardColor),
+                colors = CardDefaults.cardColors(Color.White),
                 modifier = Modifier
-                    .padding(start = 22.dp, end = 22.dp, bottom = 15.dp),
+                    .padding(start = 22.dp, end = 22.dp, bottom = 12.dp),
                 onClick = {
                     editNum = contact.id
                     onEdit(true)
-                }
+                },
+                border = BorderStroke(width = 1.dp, color = GreenBorder)
             ) {
                 println(contact)
                 Box(
@@ -51,6 +57,12 @@ fun AllNoteItem(
                         .fillMaxWidth()
                         .fillMaxHeight()
                 ) {
+                    Card(
+                        Modifier
+                            .size(35.dp, 37.dp)
+                            .padding(start = 28.dp, top = 30.dp), colors = CardDefaults.cardColors(cardColor)) {
+
+                    }
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -70,13 +82,14 @@ fun AllNoteItem(
                             Modifier
                                 .padding(end = 8.dp, bottom = 13.dp)
                                 .fillMaxHeight()
+                                .clickable() { },
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(25.dp),
-                                tint = Color.White
+                                tint = Color.Black,
                             )
                         }
                     }
@@ -89,12 +102,12 @@ fun AllNoteItem(
                         )
                     ) {
                         Row() {
-                            Text(text = contact.context, fontSize = 18.sp, color = Color.White)
+                            Text(text = "   ${contact.context}", fontSize = 18.sp, color = Color.Black)
                         }
                         Text(
                             text = contact.date,
                             fontSize = 12.sp,
-                            color = Color.White
+                            color = Color.Black
                         )
                     }
                 }
@@ -126,23 +139,24 @@ fun DailyNoteItem(
     val coroutineScope = rememberCoroutineScope()
     ContactEvent.SortContact(sortType = SortType.DATE)
     LazyColumn() {
-        item { Spacer(modifier = Modifier.height(5.dp)) }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
         items(state.contacts) { contact ->
             if (date == contact.date) {
                 val cardColor = when (contact.color) {
-                    1 -> MainColor
+                    1 -> Green40
                     2 -> Blue40
                     3 -> Purple40
                     else -> Color.Transparent
                 }
                 Card(
-                    colors = CardDefaults.cardColors(cardColor),
+                    colors = CardDefaults.cardColors(Color.White),
                     modifier = Modifier
-                        .padding(start = 22.dp, end = 22.dp, bottom = 15.dp),
+                        .padding(start = 22.dp, end = 22.dp, bottom = 12.dp),
                     onClick = {
                         editNum = contact.id
                         onEdit(true)
-                    }
+                    },
+                    border = BorderStroke(width = 1.dp, color = GreenBorder)
                 ) {
                     println(contact)
                     Box(
@@ -150,6 +164,12 @@ fun DailyNoteItem(
                             .fillMaxWidth()
                             .fillMaxHeight()
                     ) {
+                        Card(
+                            Modifier
+                                .size(35.dp, 44.dp)
+                                .padding(start = 28.dp, top = 37.dp), colors = CardDefaults.cardColors(cardColor)) {
+
+                        }
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -175,7 +195,7 @@ fun DailyNoteItem(
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(25.dp),
-                                    tint = Color.White
+                                    tint = Color.Black
                                 )
                             }
                         }
@@ -187,7 +207,7 @@ fun DailyNoteItem(
                                 bottom = 28.dp
                             )
                         ) {
-                            Text(text = contact.context, fontSize = 18.sp, color = Color.White)
+                            Text(text = "   ${contact.context}", fontSize = 18.sp, color = Color.Black)
                         }
                     }
                 }

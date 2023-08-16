@@ -3,13 +3,14 @@ package com.example.keeptodo.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Color1 = Color(0xFFEDF1E4)
-val ExtendedColor = Color(0xFFD9E7CB)
+val ExtendedColor = Color(0xFFE7F0DF)
 val ExtendedFontColor = Color(0xFF0C1806)
-val BackGround = Color(0xFFFFFFFA)
+val BackGround = Color(0xFFF9F9F4)
 val MainColor = Color(0xFF328A4B)
+val Green40 = Color(0xFF328A4B)
 val Blue40  = Color(0xFF2F5496)
-val Purple40 = Color(0xFF5D69B6)
-
+val Purple40 = Color(0xFF6D5DB6)
+val GreenBorder = Color(0xFFE6F0E5)
 
 
 val Purple80 = Color(0xFFD0BCFF)
