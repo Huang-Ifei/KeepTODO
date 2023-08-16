@@ -5,7 +5,5 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">#FDFDF5</item>
-        <item name="windowSplashScreenBackground">#FDFDF5</item>
-        <item name="postSplashScreenTheme">@style/Theme.SplashScreen</item>
     </style>
 </resources>

@@ -3,87 +3,55 @@ package com.example.keeptodo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-//import androidx.navigation.compose.NavHost
-//import androidx.navigation.compose.composable
-//import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
+import com.example.keeptodo.navgation.Navigation
+import com.example.keeptodo.room.ContactDatabase
+import com.example.keeptodo.room.ContactViewModel
 import com.example.keeptodo.ui.theme.BackGround
-import java.time.LocalDate
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 
 class MainActivity : ComponentActivity() {
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            ContactDatabase::class.java,
+            "contacts.db"
+        ).build()
+    }
+
+    private val viewModel by viewModels<ContactViewModel> (
+        factoryProducer = {
+            object :ViewModelProvider.Factory{
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return ContactViewModel(db.dao)as T
+                }
+            }
+        }
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        loadArrayFromSharedPreferences(applicationContext, "data")
-
-        try {
-            for (i in 0..999) {
-                if (arrString[1][i] == "") {
-                    arrString[0][i] = ""
-                } else if (arrString[0][i] == i.toString()) {
-                    if (arrString[1][i] == LocalDate.now().toString()) daily++
-                    n++;
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         setContent {
             MaterialTheme {
+                val state by viewModel.state.collectAsState()
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = BackGround) {
-                        Navigation()
+                        Navigation(state,viewModel::onEvent)
                 }
             }
         }
     }
 }
 
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun Navigation() {
-    val navController = rememberAnimatedNavController()
-    AnimatedNavHost(navController = navController, startDestination = "HomeScreen",
-        enterTransition = { fadeIn(animationSpec = tween(500))},
-        exitTransition = { fadeOut(animationSpec = tween(300))},
-        popEnterTransition = { fadeIn(animationSpec = tween(400))},
-        popExitTransition = { fadeOut(animationSpec = tween(300))},
-        ) {
-        composable("HomeScreen",
-            exitTransition = {fadeOut(animationSpec = tween(300,200))},
-            ) {
-            HomeScreen(navController)
-        }
-        composable("PlanScreen",
-            enterTransition = { fadeIn(animationSpec = tween(200,300))},
-            popExitTransition = { slideOutVertically(animationSpec = tween(500), targetOffsetY = {it}) }
-        ) {
-            PlanScreen(navController)
-        }
-        composable("AllNoteScreen",
-            enterTransition = { slideInHorizontally (animationSpec = tween(500), initialOffsetX = {-it})},
-            popExitTransition = { slideOutHorizontally(animationSpec = tween(500), targetOffsetX = {-it})},
-            popEnterTransition = {fadeIn(animationSpec = tween(300))}
-            ) {
-            AllNoteScreen(navController)
-        }
-        composable("EditNoteScreen"){
-            EditNoteScreen(navController)
-        }
-    }
-}
