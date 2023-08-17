@@ -20,6 +20,7 @@ import com.example.keeptodo.navgation.Navigation
 import com.example.keeptodo.room.ContactDatabase
 import com.example.keeptodo.room.ContactViewModel
 import com.example.keeptodo.ui.theme.BackGround
+import com.example.keeptodo.ui.theme.KeepTODOTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -32,11 +33,11 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
-    private val viewModel by viewModels<ContactViewModel> (
+    private val viewModel by viewModels<ContactViewModel>(
         factoryProducer = {
-            object :ViewModelProvider.Factory{
+            object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ContactViewModel(db.dao)as T
+                    return ContactViewModel(db.dao) as T
                 }
             }
         }
@@ -46,30 +47,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            MaterialTheme {
+            KeepTODOTheme {
                 val state by viewModel.state.collectAsState()
-                CompositionLocalProvider(LocalRippleTheme provides SecondaryRippleTheme) {
-                    Surface(modifier = Modifier.fillMaxSize(), color = BackGround) {
-                        Navigation(state,viewModel::onEvent)
-                    }
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    Navigation(state, viewModel::onEvent)
                 }
-                // A surface container using the 'background' color from the theme
             }
         }
     }
 }
 
-@Immutable
-private object SecondaryRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = RippleTheme.defaultRippleColor(
-        contentColor = Color.Gray,
-        lightTheme = true
-    )
 
-    @Composable
-    override fun rippleAlpha() = RippleTheme.defaultRippleAlpha(
-        contentColor = Color.Gray,
-        lightTheme = true
-    )
-}

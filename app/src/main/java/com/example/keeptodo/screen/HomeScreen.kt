@@ -18,10 +18,7 @@ import androidx.navigation.NavController
 import com.example.keeptodo.item.DailyNoteItem
 import com.example.keeptodo.room.ContactEvent
 import com.example.keeptodo.room.ContactState
-import com.example.keeptodo.ui.theme.BackGround
-import com.example.keeptodo.ui.theme.Color1
-import com.example.keeptodo.ui.theme.ExtendedColor
-import com.example.keeptodo.ui.theme.ExtendedFontColor
+import com.example.keeptodo.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedTransitionTargetStateParameter")
@@ -31,15 +28,15 @@ fun HomeScreen(
     state: ContactState,
     onEvent: (ContactEvent) -> Unit
 ) {
-    Surface(color = BackGround, modifier = Modifier.fillMaxSize()) {
+    Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()) {
         Box {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
             Scaffold(
                 Modifier
                     .fillMaxSize()
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
-                containerColor = BackGround,
-                contentColor = BackGround,
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.background,
                 topBar = {
                     MediumTopAppBar(
                         title = { Text(text = "KeepTODO今日計畫", Modifier.padding(start = 10.dp)) },
@@ -56,8 +53,8 @@ fun HomeScreen(
                         },
                         scrollBehavior = scrollBehavior,
                         colors = TopAppBarDefaults.largeTopAppBarColors(
-                            containerColor = BackGround,
-                            scrolledContainerColor = BackGround
+                            containerColor = MaterialTheme.colorScheme.background,
+                            scrolledContainerColor = MaterialTheme.colorScheme.background
                         ),
                     )
                 }) { values ->
@@ -85,7 +82,7 @@ fun NewButton(navController: NavController) {
     val width by animateIntAsState(targetValue = if (isOpen) 450 else 140, label = "", animationSpec = tween(400))
     val pad by animateIntAsState(targetValue = if (isOpen) 0 else 25, label = "", animationSpec = tween(500))
     val color by animateColorAsState(
-        targetValue = if (isOpen) BackGround else ExtendedColor,
+        targetValue = if (isOpen) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSecondary,
         label = "",
         animationSpec = tween(500)
     )
@@ -106,11 +103,11 @@ fun NewButton(navController: NavController) {
                     Icon(
                         Icons.Default.Add,
                         "制定未来计划",
-                        tint = ExtendedFontColor,
+                        tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.size(30.dp)
                     )
                 },
-                text = { Text(text = "新增计划", color = ExtendedFontColor, fontSize = 15.sp) },
+                text = { Text(text = "新增计划", color = MaterialTheme.colorScheme.secondary, fontSize = 15.sp) },
                 containerColor = color,
                 modifier = Modifier.size(width.dp, height.dp),
                 elevation = FloatingActionButtonDefaults.elevation(

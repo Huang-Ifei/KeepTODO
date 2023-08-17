@@ -12,8 +12,6 @@ import androidx.navigation.NavController
 import com.example.keeptodo.item.AllNoteItem
 import com.example.keeptodo.room.ContactEvent
 import com.example.keeptodo.room.ContactState
-import com.example.keeptodo.ui.theme.BackGround
-import com.example.keeptodo.ui.theme.Color1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,14 +20,14 @@ fun AllNoteScreen(
     state: ContactState,
     onEvent: (ContactEvent) -> Unit
 ) {
-    Surface(color = BackGround, modifier = Modifier.fillMaxSize(), shadowElevation = 50.dp) {
+    Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize(), shadowElevation = 50.dp) {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         Scaffold(
             Modifier
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
-            containerColor = BackGround,
-            contentColor = BackGround,
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.background,
             topBar = {
                 MediumTopAppBar(
                     title = { Text(text = "KeepTODO所有計畫", Modifier.padding(10.dp)) },
@@ -42,8 +40,8 @@ fun AllNoteScreen(
                     },
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = BackGround,
-                        scrolledContainerColor = BackGround
+                        containerColor = MaterialTheme.colorScheme.background,
+                        scrolledContainerColor = MaterialTheme.colorScheme.background
                     ),
                 )
             }) { values ->

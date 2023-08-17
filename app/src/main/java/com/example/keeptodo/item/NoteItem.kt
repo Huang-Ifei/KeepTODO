@@ -42,7 +42,7 @@ fun AllNoteItem(
                 else -> Color.Transparent
             }
             Card(
-                colors = CardDefaults.cardColors(Color.White),
+                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
                 modifier = Modifier
                     .padding(start = 22.dp, end = 22.dp, bottom = 12.dp),
                 onClick = {
@@ -59,8 +59,8 @@ fun AllNoteItem(
                 ) {
                     Card(
                         Modifier
-                            .size(35.dp, 37.dp)
-                            .padding(start = 28.dp, top = 30.dp), colors = CardDefaults.cardColors(cardColor)) {
+                            .size(35.dp, 36.dp)
+                            .padding(start = 28.dp, top = 29.dp), colors = CardDefaults.cardColors(cardColor)) {
 
                     }
                     Column(
@@ -89,7 +89,7 @@ fun AllNoteItem(
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(25.dp),
-                                tint = Color.Black,
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
                         }
                     }
@@ -102,12 +102,12 @@ fun AllNoteItem(
                         )
                     ) {
                         Row() {
-                            Text(text = "   ${contact.context}", fontSize = 18.sp, color = Color.Black)
+                            Text(text = "   ${contact.context}", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
                         }
                         Text(
                             text = contact.date,
                             fontSize = 12.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 }
@@ -149,7 +149,7 @@ fun DailyNoteItem(
                     else -> Color.Transparent
                 }
                 Card(
-                    colors = CardDefaults.cardColors(Color.White),
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
                     modifier = Modifier
                         .padding(start = 22.dp, end = 22.dp, bottom = 12.dp),
                     onClick = {
@@ -195,7 +195,7 @@ fun DailyNoteItem(
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(25.dp),
-                                    tint = Color.Black
+                                    tint = MaterialTheme.colorScheme.onSecondaryContainer
                                 )
                             }
                         }
@@ -207,7 +207,7 @@ fun DailyNoteItem(
                                 bottom = 28.dp
                             )
                         ) {
-                            Text(text = "   ${contact.context}", fontSize = 18.sp, color = Color.Black)
+                            Text(text = "   ${contact.context}", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
                         }
                     }
                 }

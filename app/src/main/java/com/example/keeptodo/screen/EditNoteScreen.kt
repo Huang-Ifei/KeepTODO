@@ -63,7 +63,7 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
     onEvent(ContactEvent.SetContext(context))
     onEvent(ContactEvent.SetColor(colorSelect))
     val dateDialogState = rememberMaterialDialogState()
-    Surface(modifier = Modifier.fillMaxSize(), color = BackGround) {
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
             Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +72,7 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
             Card(
                 Modifier
                     .height(450.dp)
-                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(Color.White),
+                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
                 border = BorderStroke(width = 1.dp, color = GreenBorder)
             ) {
                 Column(Modifier.fillMaxSize()) {
@@ -81,10 +81,12 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                             Spacer(modifier = Modifier.height(25.dp))
                             Row {
                                 Spacer(modifier = Modifier.width(25.dp))
-                                Text(text = "修改计划", fontSize = 20.sp)
+                                Text(
+                                    text = "修改计划", fontSize = 20.sp,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
 
                             }
-                            Divider(Modifier.padding(10.dp))
                         }
 
                         Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
@@ -111,13 +113,14 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 onEvent(ContactEvent.SetContext(context))
                             },
                             colors = TextFieldDefaults.textFieldColors(
-                                textColor = Color.Black,
-                                cursorColor = MainColor,
-                                containerColor = Color.White,
-                                focusedIndicatorColor = indicatorColor,
-                                unfocusedIndicatorColor = indicatorColor,
-                                focusedLabelColor = indicatorColor,
-                                selectionColors = TextSelectionColors(MainColor, Color.LightGray)
+                                textColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                cursorColor = MaterialTheme.colorScheme.primary,
+                                containerColor = MaterialTheme.colorScheme.surface,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                focusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                selectionColors = TextSelectionColors(MaterialTheme.colorScheme.primary,MaterialTheme.colorScheme.onSecondary)
                             ),
                             label = { Text(text = "内容") },
                             maxLines = 4,
@@ -130,11 +133,12 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Spacer(modifier = Modifier.width(24.dp))
-                        Text(text = "计划日期:", fontSize = 18.sp)
+                        Text(text = "计划日期:", fontSize = 18.sp,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer)
                         Text(
                             text = formatDate,
                             fontSize = 18.sp,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
                             modifier = Modifier.clickable { dateDialogState.show() })
                     }
                     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -145,12 +149,13 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 colorSelect = 1
                                 onEvent(ContactEvent.SetColor(colorSelect))
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = Green40)
+                            colors = RadioButtonDefaults.colors(selectedColor = Green40,unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer)
                         )
                         Text(text = "绿色", fontSize = 18.sp, modifier = Modifier.clickable {
                             colorSelect = 1
                             onEvent(ContactEvent.SetColor(colorSelect))
-                        })
+                        },
+                            color = MaterialTheme.colorScheme.onSecondaryContainer)
                         Spacer(modifier = Modifier.width(5.dp))
                         RadioButton(
                             selected = colorSelect == 2,
@@ -158,12 +163,13 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 colorSelect = 2
                                 onEvent(ContactEvent.SetColor(colorSelect))
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = Blue40)
+                            colors = RadioButtonDefaults.colors(selectedColor = Blue40,unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer)
                         )
                         Text(text = "蓝色", fontSize = 18.sp, modifier = Modifier.clickable {
                             colorSelect = 2
                             onEvent(ContactEvent.SetColor(colorSelect))
-                        })
+                        },
+                            color = MaterialTheme.colorScheme.onSecondaryContainer)
                         Spacer(modifier = Modifier.width(5.dp))
                         RadioButton(
                             selected = colorSelect == 3,
@@ -171,12 +177,13 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 colorSelect = 3
                                 onEvent(ContactEvent.SetColor(colorSelect))
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = Purple40)
+                            colors = RadioButtonDefaults.colors(selectedColor = Purple40,unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer)
                         )
                         Text(text = "紫色", fontSize = 18.sp, modifier = Modifier.clickable {
                             colorSelect = 3
                             onEvent(ContactEvent.SetColor(colorSelect))
-                        })
+                        },
+                            color = MaterialTheme.colorScheme.onSecondaryContainer)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
@@ -185,9 +192,9 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                 onEvent(ContactEvent.DeleteContact(contactSelect))
                                 navController.popBackStack()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = BackGround)
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background)
                         ) {
-                            Text(text = "删除计划", fontSize = 17.sp, color = ExtendedFontColor)
+                            Text(text = "删除计划", fontSize = 17.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Button(
@@ -200,9 +207,9 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                                     navController.popBackStack()
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(MainColor),
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                         ) {
-                            Text(text = "保存计划", fontSize = 17.sp, color = Color.White)
+                            Text(text = "保存计划", fontSize = 17.sp, color = MaterialTheme.colorScheme.onPrimary)
                         }
                         Spacer(modifier = Modifier.width(25.dp))
                     }
@@ -218,15 +225,19 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
                     positiveButton(
                         text = "确认",
                         onClick = { },
-                        textStyle = TextStyle(color = MainColor)
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.primary)
                     )
                 },
+                backgroundColor = MaterialTheme.colorScheme.surface
             ) {
                 datepicker(
                     initialDate = dateSelect, title = "选择日期", colors = DatePickerDefaults.colors(
-                        headerBackgroundColor = MainColor,
-                        headerTextColor = BackGround,
-                        dateActiveBackgroundColor = MainColor
+                        headerBackgroundColor = MaterialTheme.colorScheme.primary,
+                        headerTextColor = MaterialTheme.colorScheme.surface,
+                        dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
+                        calendarHeaderTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        dateActiveTextColor = MaterialTheme.colorScheme.onPrimary,
+                        dateInactiveTextColor = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 ) {
                     dateSelect = it
