@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.keeptodo.item.AllNoteItem
+import com.example.keeptodo.item.AllNoteItems
 import com.example.keeptodo.room.ContactEvent
 import com.example.keeptodo.room.ContactState
 
@@ -45,15 +45,9 @@ fun AllNoteScreen(
                     ),
                 )
             }) { values ->
-            Column(
-                Modifier
-                    .padding(values)
-            )
-            {
-                AllNoteItem(state, onEvent, onEdit = {
-                    if (it) navController.navigate("EditNoteScreen")
-                })
-            }
+            AllNoteItems(onEvent, state, values, onEdit = {
+                if (it) navController.navigate("EditNoteScreen")
+            })
         }
     }
 }

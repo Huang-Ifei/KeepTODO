@@ -14,3 +14,4 @@ data class Contact(
 
 
 var editNum = 0
+var deleteId = -1

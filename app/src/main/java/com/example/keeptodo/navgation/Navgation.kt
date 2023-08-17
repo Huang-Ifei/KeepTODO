@@ -46,7 +46,8 @@ fun Navigation(state: ContactState, onEvent: (ContactEvent) -> Unit) {
         ) {
             AllNoteScreen(navController, state, onEvent)
         }
-        composable("EditNoteScreen") {
+        composable("EditNoteScreen",
+            popExitTransition = { fadeOut(animationSpec = tween(200,200))},) {
             EditNoteScreen(navController, state, onEvent)
         }
     }

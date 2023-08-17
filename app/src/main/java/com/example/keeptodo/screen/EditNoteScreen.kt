@@ -1,5 +1,7 @@
 package com.example.keeptodo.screen
 
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,6 +26,10 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -47,8 +53,8 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
     var context by remember {
         mutableStateOf(contactSelect.context)
     }
-    var indicatorColor by remember {
-        mutableStateOf(Color.Gray)
+    var isError by remember {
+        mutableStateOf(false)
     }
     var colorSelect by remember {
         mutableStateOf(contactSelect.color)
@@ -59,6 +65,23 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
     var formatDate by remember {
         mutableStateOf(DateTimeFormatter.ofPattern("yyyy年MM月dd日").format(dateSelect))
     }
+    var isDelete by remember {
+        mutableStateOf(false)
+    }
+    var isSave by remember {
+        mutableStateOf(false)
+    }
+    var isClose by remember {
+        mutableStateOf(false)
+    }
+    var isOpen by remember {
+        mutableStateOf(false)
+    }
+    var arrangement by remember {
+        mutableStateOf(Arrangement.Top)
+    }
+    val height by animateIntAsState(targetValue = if (isDelete||isClose||isSave) 0 else if (isOpen) 450 else 0, label = "", animationSpec = tween(450))
+    val coroutineScope = rememberCoroutineScope()
     onEvent(ContactEvent.SetDate(formatDate))
     onEvent(ContactEvent.SetContext(context))
     onEvent(ContactEvent.SetColor(colorSelect))
@@ -69,153 +92,192 @@ fun EditNoteScreen(navController: NavController, state: ContactState, onEvent: (
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Card(
-                Modifier
-                    .height(450.dp)
-                    .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-                border = BorderStroke(width = 1.dp, color = GreenBorder)
-            ) {
-                Column(Modifier.fillMaxSize()) {
-                    Box {
-                        Column {
-                            Spacer(modifier = Modifier.height(25.dp))
-                            Row {
-                                Spacer(modifier = Modifier.width(25.dp))
+            Column(Modifier.height(450.dp), verticalArrangement = arrangement) {
+                Card(
+                    Modifier
+                        .height(height.dp)
+                        .fillMaxWidth(0.82f), colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(width = 1.dp, color = GreenBorder)
+                ) {
+                    isOpen=true
+                    Column(Modifier.fillMaxSize()) {
+                        Box {
+                            Column {
+                                Spacer(modifier = Modifier.height(25.dp))
+                                Row {
+                                    Spacer(modifier = Modifier.width(25.dp))
+                                    Text(
+                                        text = "修改计划", fontSize = 20.sp,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                                    )
+
+                                }
+                            }
+
+                            Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
+                                Spacer(modifier = Modifier.height(15.dp))
+                                Row {
+                                    IconButton(onClick = {
+                                        arrangement = Arrangement.Top
+                                        isClose = true
+                                        navController.popBackStack()
+                                    }) {
+                                        Icon(
+                                            Icons.Default.Close,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(25.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(20.dp))
+                                }
+                            }
+                        }
+                        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                            OutlinedTextField(
+                                value = context,
+                                onValueChange = {
+                                    context = it
+                                    onEvent(ContactEvent.SetContext(context))
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    textColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    cursorColor = MaterialTheme.colorScheme.primary,
+                                    containerColor = MaterialTheme.colorScheme.surface,
+                                    focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    focusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    selectionColors = TextSelectionColors(
+                                        MaterialTheme.colorScheme.primary,
+                                        MaterialTheme.colorScheme.onSecondary
+                                    )
+                                ),
+                                label = { Text(text = "内容") },
+                                maxLines = 4,
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp)
+                                    .fillMaxWidth(),
+                                textStyle = TextStyle(fontSize = 18.sp),
+                                isError = isError
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Spacer(modifier = Modifier.width(24.dp))
+                            Text(
+                                text = "计划日期:", fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            Text(
+                                text = formatDate,
+                                fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.clickable { dateDialogState.show() })
+                        }
+                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Spacer(modifier = Modifier.width(12.dp))
+                            RadioButton(
+                                selected = colorSelect == 1,
+                                onClick = {
+                                    colorSelect = 1
+                                    onEvent(ContactEvent.SetColor(colorSelect))
+                                },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = Green40,
+                                    unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            )
+                            Text(
+                                text = "绿色", fontSize = 18.sp, modifier = Modifier.clickable {
+                                    colorSelect = 1
+                                    onEvent(ContactEvent.SetColor(colorSelect))
+                                },
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            RadioButton(
+                                selected = colorSelect == 2,
+                                onClick = {
+                                    colorSelect = 2
+                                    onEvent(ContactEvent.SetColor(colorSelect))
+                                },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = Blue40,
+                                    unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            )
+                            Text(
+                                text = "蓝色", fontSize = 18.sp, modifier = Modifier.clickable {
+                                    colorSelect = 2
+                                    onEvent(ContactEvent.SetColor(colorSelect))
+                                },
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            RadioButton(
+                                selected = colorSelect == 3,
+                                onClick = {
+                                    colorSelect = 3
+                                    onEvent(ContactEvent.SetColor(colorSelect))
+                                },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = Purple40,
+                                    unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            )
+                            Text(
+                                text = "紫色", fontSize = 18.sp, modifier = Modifier.clickable {
+                                    colorSelect = 3
+                                    onEvent(ContactEvent.SetColor(colorSelect))
+                                },
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                            Button(
+                                onClick = {
+                                    arrangement= Arrangement.Bottom
+                                    isDelete = true
+                                    onEvent(ContactEvent.DeleteContact(contactSelect))
+                                    navController.popBackStack()
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background)
+                            ) {
                                 Text(
-                                    text = "修改计划", fontSize = 20.sp,
+                                    text = "删除计划",
+                                    fontSize = 17.sp,
                                     color = MaterialTheme.colorScheme.onSecondaryContainer
                                 )
-
                             }
-                        }
-
-                        Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-                            Spacer(modifier = Modifier.height(15.dp))
-                            Row {
-                                IconButton(onClick = {
-                                    navController.popBackStack()
-                                }) {
-                                    Icon(
-                                        Icons.Default.Close,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(25.dp)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(20.dp))
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Button(
+                                onClick = {
+                                    if (context.isBlank()) {
+                                        isError = true
+                                    } else {
+                                        arrangement = Arrangement.Center
+                                        coroutineScope.launch {
+                                            withContext(Dispatchers.IO){
+                                                delay(160)
+                                                isSave = true
+                                            }
+                                        }
+                                        onEvent(ContactEvent.DeleteContact(contactSelect))
+                                        onEvent(ContactEvent.SaveContact)
+                                        navController.popBackStack()
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+                            ) {
+                                Text(text = "保存计划", fontSize = 17.sp, color = MaterialTheme.colorScheme.onPrimary)
                             }
+                            Spacer(modifier = Modifier.width(25.dp))
                         }
-                    }
-                    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                        OutlinedTextField(
-                            value = context,
-                            onValueChange = {
-                                context = it
-                                onEvent(ContactEvent.SetContext(context))
-                            },
-                            colors = TextFieldDefaults.textFieldColors(
-                                textColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                                cursorColor = MaterialTheme.colorScheme.primary,
-                                containerColor = MaterialTheme.colorScheme.surface,
-                                focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                focusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                selectionColors = TextSelectionColors(MaterialTheme.colorScheme.primary,MaterialTheme.colorScheme.onSecondary)
-                            ),
-                            label = { Text(text = "内容") },
-                            maxLines = 4,
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .fillMaxWidth(),
-                            textStyle = TextStyle(fontSize = 18.sp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Spacer(modifier = Modifier.width(24.dp))
-                        Text(text = "计划日期:", fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        Text(
-                            text = formatDate,
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier = Modifier.clickable { dateDialogState.show() })
-                    }
-                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Spacer(modifier = Modifier.width(12.dp))
-                        RadioButton(
-                            selected = colorSelect == 1,
-                            onClick = {
-                                colorSelect = 1
-                                onEvent(ContactEvent.SetColor(colorSelect))
-                            },
-                            colors = RadioButtonDefaults.colors(selectedColor = Green40,unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer)
-                        )
-                        Text(text = "绿色", fontSize = 18.sp, modifier = Modifier.clickable {
-                            colorSelect = 1
-                            onEvent(ContactEvent.SetColor(colorSelect))
-                        },
-                            color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        Spacer(modifier = Modifier.width(5.dp))
-                        RadioButton(
-                            selected = colorSelect == 2,
-                            onClick = {
-                                colorSelect = 2
-                                onEvent(ContactEvent.SetColor(colorSelect))
-                            },
-                            colors = RadioButtonDefaults.colors(selectedColor = Blue40,unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer)
-                        )
-                        Text(text = "蓝色", fontSize = 18.sp, modifier = Modifier.clickable {
-                            colorSelect = 2
-                            onEvent(ContactEvent.SetColor(colorSelect))
-                        },
-                            color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        Spacer(modifier = Modifier.width(5.dp))
-                        RadioButton(
-                            selected = colorSelect == 3,
-                            onClick = {
-                                colorSelect = 3
-                                onEvent(ContactEvent.SetColor(colorSelect))
-                            },
-                            colors = RadioButtonDefaults.colors(selectedColor = Purple40,unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer)
-                        )
-                        Text(text = "紫色", fontSize = 18.sp, modifier = Modifier.clickable {
-                            colorSelect = 3
-                            onEvent(ContactEvent.SetColor(colorSelect))
-                        },
-                            color = MaterialTheme.colorScheme.onSecondaryContainer)
-                    }
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                        Button(
-                            onClick = {
-                                onEvent(ContactEvent.DeleteContact(contactSelect))
-                                navController.popBackStack()
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background)
-                        ) {
-                            Text(text = "删除计划", fontSize = 17.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Button(
-                            onClick = {
-                                if (context.isBlank()) {
-                                    indicatorColor = Color.Red
-                                } else {
-                                    onEvent(ContactEvent.DeleteContact(contactSelect))
-                                    onEvent(ContactEvent.SaveContact)
-                                    navController.popBackStack()
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                        ) {
-                            Text(text = "保存计划", fontSize = 17.sp, color = MaterialTheme.colorScheme.onPrimary)
-                        }
-                        Spacer(modifier = Modifier.width(25.dp))
-                    }
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Row(modifier = Modifier.fillMaxWidth()) {
 
+                        }
                     }
                 }
             }

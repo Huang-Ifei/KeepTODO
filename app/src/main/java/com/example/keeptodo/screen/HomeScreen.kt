@@ -15,10 +15,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.keeptodo.item.DailyNoteItem
+import com.example.keeptodo.item.DailyNoteItems
 import com.example.keeptodo.room.ContactEvent
 import com.example.keeptodo.room.ContactState
-import com.example.keeptodo.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedTransitionTargetStateParameter")
@@ -28,6 +27,9 @@ fun HomeScreen(
     state: ContactState,
     onEvent: (ContactEvent) -> Unit
 ) {
+    var visible by remember {
+        mutableStateOf(true)
+    }
     Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()) {
         Box {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -58,15 +60,9 @@ fun HomeScreen(
                         ),
                     )
                 }) { values ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(values)
-                ) {
-                    DailyNoteItem(state, onEvent, onEdit = {
-                        if (it) navController.navigate("EditNoteScreen")
-                    })
-                }
+                DailyNoteItems(state, onEvent, values, onEdit = {
+                    if (it) navController.navigate("EditNoteScreen")
+                })
             }
             NewButton(navController)
         }
