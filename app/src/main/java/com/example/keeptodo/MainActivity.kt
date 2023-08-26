@@ -19,6 +19,8 @@ import androidx.room.Room
 import com.example.keeptodo.navgation.Navigation
 import com.example.keeptodo.room.ContactDatabase
 import com.example.keeptodo.room.ContactViewModel
+import com.example.keeptodo.room.HistoryContactDatabase
+import com.example.keeptodo.room.HistoryContactViewModel
 import com.example.keeptodo.ui.theme.BackGround
 import com.example.keeptodo.ui.theme.KeepTODOTheme
 
@@ -33,11 +35,29 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
+    private val hdb by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            HistoryContactDatabase::class.java,
+            "historyContacts.db"
+        ).build()
+    }
+
     private val viewModel by viewModels<ContactViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return ContactViewModel(db.dao) as T
+                }
+            }
+        }
+    )
+
+    private val historyViewModel by viewModels<HistoryContactViewModel>(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return HistoryContactViewModel(hdb.dao) as T
                 }
             }
         }
@@ -49,8 +69,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             KeepTODOTheme {
                 val state by viewModel.state.collectAsState()
+                val historyState by historyViewModel.state.collectAsState()
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Navigation(state, viewModel::onEvent)
+                    Navigation(state, viewModel::onEvent,historyState,historyViewModel::onEvent)
                 }
             }
         }

@@ -17,3 +17,16 @@ interface  ContactDao {
     @Query("SELECT * FROM contact ORDER BY date ASC")
     fun getContactByDate():Flow<List<Contact>>
 }
+
+
+@Dao
+interface  HistoryContactDao {
+    @Upsert
+    suspend fun upsertContact(contact: HistoryContact)
+
+    @Delete
+    suspend fun deleteContact(contact: HistoryContact)
+
+    @Query("SELECT * FROM historycontact ORDER BY date ASC")
+    fun getContactByDate():Flow<List<HistoryContact>>
+}

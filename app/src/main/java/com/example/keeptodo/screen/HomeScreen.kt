@@ -6,6 +6,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,6 +19,7 @@ import androidx.navigation.NavController
 import com.example.keeptodo.item.DailyNoteItems
 import com.example.keeptodo.room.ContactEvent
 import com.example.keeptodo.room.ContactState
+import com.example.keeptodo.room.HistoryContactEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedTransitionTargetStateParameter")
@@ -25,11 +27,9 @@ import com.example.keeptodo.room.ContactState
 fun HomeScreen(
     navController: NavController,
     state: ContactState,
-    onEvent: (ContactEvent) -> Unit
+    onEvent: (ContactEvent) -> Unit,
+    onHistoryEvent : (HistoryContactEvent) -> Unit
 ) {
-    var visible by remember {
-        mutableStateOf(true)
-    }
     Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()) {
         Box {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -58,11 +58,23 @@ fun HomeScreen(
                             containerColor = MaterialTheme.colorScheme.background,
                             scrolledContainerColor = MaterialTheme.colorScheme.background
                         ),
+                        actions = {
+                            IconButton(onClick = {
+                                navController.navigate("CalenderScreen")
+                            }, modifier = Modifier.padding(end = 10.dp)) {
+                                Icon(
+                                    Icons.Default.CalendarMonth,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(25.dp),
+                                    tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            }
+                        }
                     )
                 }) { values ->
                 DailyNoteItems(state, onEvent, values, onEdit = {
                     if (it) navController.navigate("EditNoteScreen")
-                })
+                },onHistoryEvent)
             }
             NewButton(navController)
         }

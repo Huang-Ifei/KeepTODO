@@ -19,10 +19,13 @@ import androidx.compose.ui.unit.sp
 import com.example.keeptodo.room.Contact
 import com.example.keeptodo.room.ContactEvent
 import com.example.keeptodo.room.ContactState
+import com.example.keeptodo.room.HistoryContactEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -30,6 +33,7 @@ fun AllNoteItem(
     onEvent: (ContactEvent) -> Unit,
     contact: Contact,
     cardColor: Color,
+    onHistoryEvent : (HistoryContactEvent) -> Unit
 ) {
     var visible by remember {
         mutableStateOf(true)
@@ -66,7 +70,21 @@ fun AllNoteItem(
                     coroutineScope.launch {
                         withContext(Dispatchers.IO) {
                             visible = false
+                            onHistoryEvent(HistoryContactEvent.SetContext(contact.context))
+                            onHistoryEvent(HistoryContactEvent.SetDate(contact.date))
+                            onHistoryEvent(HistoryContactEvent.SetColor(contact.color))
+                            onHistoryEvent(
+                                HistoryContactEvent.SetMonth(
+                                    DateTimeFormatter.ofPattern("yyyy年MM月").format(
+                                        LocalDate.parse(
+                                            contact.date,
+                                            DateTimeFormatter.ofPattern("yyyy年MM月dd日")
+                                        )
+                                    )
+                                )
+                            )
                             delay(400)
+                            onHistoryEvent(HistoryContactEvent.SaveContact)
                             onEvent(ContactEvent.DeleteContact(contact))
                             visible = true
                         }

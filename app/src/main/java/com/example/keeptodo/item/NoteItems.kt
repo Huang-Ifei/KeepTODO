@@ -31,29 +31,30 @@ fun AllNoteItems(
     state: ContactState,
     paddingValues: PaddingValues,
     onEdit: (Boolean) -> Unit,
+    onHistoryEvent : (HistoryContactEvent) -> Unit
 ) {
     ContactEvent.SortContact(sortType = SortType.DATE)
     LazyColumn(Modifier.padding(paddingValues)) {
         item { Spacer(modifier = Modifier.height(8.dp)) }
         items(state.contacts) { contact ->
-            val cardColor = when (contact.color) {
-                1 -> Green40
-                2 -> Blue40
-                3 -> Purple40
-                else -> Color.Transparent
-            }
-            Card(
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-                modifier = Modifier
-                    .padding(start = 22.dp, end = 22.dp, bottom = 12.dp),
-                onClick = {
-                    editNum = contact.id
-                    onEdit(true)
-                },
-                border = BorderStroke(width = 1.dp, color = GreenBorder)
-            ) {
-                AllNoteItem(onEvent, contact, cardColor)
-            }
+                val cardColor = when (contact.color) {
+                    1 -> Green40
+                    2 -> Blue40
+                    3 -> Purple40
+                    else -> Color.Transparent
+                }
+                Card(
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+                    modifier = Modifier
+                        .padding(start = 22.dp, end = 22.dp, bottom = 12.dp),
+                    onClick = {
+                        editNum = contact.id
+                        onEdit(true)
+                    },
+                    border = BorderStroke(width = 1.dp, color = GreenBorder)
+                ) {
+                    AllNoteItem(onEvent, contact, cardColor,onHistoryEvent)
+                }
         }
     }
     if (state.contacts.isEmpty()) {
@@ -77,6 +78,7 @@ fun DailyNoteItems(
     onEvent: (ContactEvent) -> Unit,
     paddingValues: PaddingValues,
     onEdit: (Boolean) -> Unit,
+    onHistoryEvent : (HistoryContactEvent) ->Unit
 ) {
     val date by remember {
         mutableStateOf(DateTimeFormatter.ofPattern("yyyy年MM月dd日").format(LocalDate.now()))
@@ -102,7 +104,7 @@ fun DailyNoteItems(
                     },
                     border = BorderStroke(width = 1.dp, color = GreenBorder)
                 ) {
-                    DailyNoteItem(onEvent, contact, cardColor)
+                    DailyNoteItem(onEvent, contact, cardColor,onHistoryEvent)
                 }
             }
         }

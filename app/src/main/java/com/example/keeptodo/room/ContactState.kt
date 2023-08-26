@@ -10,3 +10,14 @@ data class ContactState(
     val color: Int = 1,
     val sortType: SortType = SortType.DATE
 )
+
+
+data class HistoryContactState(
+    val contacts:List<HistoryContact> = emptyList(),
+    val date: String =  DateTimeFormatter.ofPattern("yyyy年MM月dd日").format(LocalDate.now()),
+    val month: String =  DateTimeFormatter.ofPattern("yyyy年MM月").format(LocalDate.now()),
+    val context:String = "",
+    val color: Int = 1,
+    val sortType: SortType = SortType.DATE
+)
+

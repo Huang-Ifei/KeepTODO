@@ -11,3 +11,14 @@ abstract class ContactDatabase:RoomDatabase() {
 
     abstract val dao:ContactDao
 }
+
+
+@Database(
+    entities = [HistoryContact::class],
+    version = 1
+)
+abstract class HistoryContactDatabase:RoomDatabase() {
+
+    abstract val dao:HistoryContactDao
+}
+
