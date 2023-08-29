@@ -15,9 +15,8 @@
 
 ## 历史版本
 
-### 1.2.5版本 
-* 链接：[1.2.5版本链接](https://github.com/Roccc10/KeepTODO/blob/main/app/release/KeepTODO1.2.5.apk)
-* 更新日志：添加日历记录功能.
+### [1.2.5版本](https://github.com/Roccc10/KeepTODO/blob/main/app/release/KeepTODO1.2.5.apk)
+更新日志：添加日历记录功能.
 
 ### 1.2.4版本
 * 链接：(https://github.com/Roccc10/KeepTODO/blob/main/app/release/KeepTODO1.2.4.apk)
