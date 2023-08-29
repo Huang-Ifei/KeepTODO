@@ -12,7 +12,7 @@ https://github.com/Roccc10/KeepTODO/blob/main/app/release/KeepTODO1.2.6.apk
 
 更新日志：
 
-全新Brush渐变色设计更加抢眼；变更添加以及编辑逻辑，动画更加流畅舒适
+全新Brush渐变色设计更加抢眼；变更添加以及编辑逻辑，动画更加流畅舒适；解决NavHost快速点击时多次载入的Bug.
 *************
 历史版本链接：
 
