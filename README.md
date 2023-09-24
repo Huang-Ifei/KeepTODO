@@ -1,5 +1,5 @@
 # KeepTODO
-### 立即下载：[APK链接](https://github.com/Roccc10/KeepTODO/blob/main/app/release/KeepTODO1.2.6.apk)
+### 立即下载：[APK链接](https://github.com/Roccc10/KeepTODO/releases/tag/1.2.6)
 
 简介：一个简单美观的安卓To do软件，可以根据自己的需要制定每一天的计划，并可在日历界面查看月度计划完成情况；KeepTODO拥有优秀的动画、更加现代的一体化设计而非大色卡StatusBar、TopAppBar设计。
 
