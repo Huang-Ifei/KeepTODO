@@ -1,10 +1,11 @@
 # KeepTODO
-
 ### 此项目已经停止维护！
 ### This project has been stopped for maintenance.
-#### 因为此项目的技术特点已经不符合我对未来发展方向的预期，此项目已经停止维护，但是，我正在开发功能更丰富、界面更美观、更模块化更易于维护的全新Tab Note应用程式。当正式版发布时将会在这里告诉您。
+#### 因为此项目的技术特点暂时不符合我对未来发展方向的预期，此项目已经停止维护，但是，我正在开发一款全新的应用程式Tab Note，它吸收了许多本项目的开发经验，新的程式将拥有全新的联网同步功能、全新的在线内容获取功能、全新的链接快速启动功能、全新的潮牌颜色主题、更模块化更易于维护的代码。
 
-### 最后更新：[APK下载链接](https://github.com/Huang-Ifei/KeepTODO/releases/tag/1.2.6)
+当Tab Note的正式版发布时将会在这里告诉您。
+
+### 最后一次更新：[APK下载链接](https://github.com/Huang-Ifei/KeepTODO/releases/tag/1.2.6)
 
 简介：一个简单美观的安卓To do软件，可以根据自己的需要制定每一天的计划，并可在日历界面查看月度计划完成情况；KeepTODO拥有优秀的动画、更加现代的一体化设计而非大色卡StatusBar、TopAppBar设计。
 
